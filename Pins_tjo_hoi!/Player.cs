@@ -6,7 +6,7 @@ namespace Pins_tjo_hoi_
     {
         private string _name;
         private Trinket _chosenTrinket;
-        public int Money { get; private set; }
+        private int _money;
         private int _maxGas;
         private int _gas;
         private List<string> _collectedPins;
@@ -15,22 +15,46 @@ namespace Pins_tjo_hoi_
         {
             _name = name;
             _chosenTrinket = chosenTrinket;
-            Money = money;
+            _money = money;
             _gas = gas;
             _maxGas = gas;
             _collectedPins = new List<string>();
         }
 
+        public bool Drive()
+        {
+            if (_gas >= 1)
+            {
+                _gas -= 1;
+                Console.Clear();
+                Console.WriteLine("Finere bensere er rett rundt svingen :)");
+                return true;
+            }
+            Console.WriteLine("Du har ikke nok bensin, til å dra til finere bensere :(");
+            return false;
+        }
+
         public void Refuel()
         {
-            _gas = _maxGas;
+                _gas = _maxGas;
+        }
+
+        public bool Pay(int price)
+        {
+            if (_money >= price)
+            {
+                _money -= price;
+                return true;
+            }
+            Console.WriteLine("Du har ikke nok penger :(");
+            return false;
         }
 
         public void PlayForMoney()
         {
             var r = new Random();
             var gainedMoney = r.Next(0, 100);
-            Money += gainedMoney;
+            _money += gainedMoney;
             Console.WriteLine($"Du tjente {gainedMoney} peng");
         }
 
@@ -52,13 +76,18 @@ namespace Pins_tjo_hoi_
 
         public void BuyPins(string pin, int pinPrice)
         {
-            if (Money >= pinPrice)
+            if (_money >= pinPrice)
             {
-                Money -= pinPrice;
+                _money -= pinPrice;
                 _collectedPins.Add(pin);
                 Console.WriteLine($"Takk for at du kjøpt {pin} hos oss!");
             }
             else Console.WriteLine($"Ser ikke ut som du har nok penger :(");
+        }
+
+        public void ShowMoney()
+        {
+            Console.WriteLine($"Du har: {_money} peng");
         }
     }
 }

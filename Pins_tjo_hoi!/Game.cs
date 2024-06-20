@@ -6,6 +6,7 @@ namespace Pins_tjo_hoi_
     internal class Game
     {
         private List<string> _allPins;
+        private List<string> _allBensernNames;
         private List <Trinket> _trinkets;
         private Player _player;
         private Bensern _bensern;
@@ -29,13 +30,44 @@ namespace Pins_tjo_hoi_
                 new Trinket("Wånderbævm i Ruta", "Bilen din når altid en ekstra stasjon"),
             ];
 
+            _allBensernNames =
+            [
+                "7/11",
+                "Circle K",
+                "YX",
+                "Esso",
+                "Uno x",
+                "Shell",
+            ];
+        }
+        public void StartGame()
+        {
             Createplayer();
-            _bensern = new Bensern(_player, _allPins);
-            _bensern.Shop();
+            CreateNewStation();
+            while (true)
+            {
+                _bensern.ShowMeny();
+                _bensern.ChooseMeny();
+                if (_bensern.wantToLeave == true)
+                {
+                    CreateNewStation();
+                }
+            }
         }
 
+        private void CreateNewStation()
+        {
+            _bensern = new Bensern(_player, _allPins, GetRandomBenserName());
+        }
 
-        void Createplayer()
+        private string GetRandomBenserName()
+        {
+            var r = new Random();
+            var randomIndex = r.Next(_allBensernNames.Count);
+            return _allBensernNames[randomIndex];
+        }
+
+        private void Createplayer()
         {
             Console.WriteLine("What is your name?");
             string name = Console.ReadLine();
